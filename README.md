@@ -1,6 +1,9 @@
 # button-module
 a simple framer module for creating buttons from the design tab
 
+![alt text](https://github.com/gejoreni/button-module/blob/master/button-module.png?raw=true "Logo Title Text 1")
+
+
 So, first things first - i'm not a developer, not even close. This is just an example of how i'd like to take advantage of the design tab inside of the code tab. Don't judge me  - and if you don't like it, leave it - I won't judge you ;)
 
 ## How to:
