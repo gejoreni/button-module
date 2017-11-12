@@ -29,7 +29,8 @@ newButton = new Button
  ```
 #### 3. work with the new button like you would any other layer.
 
-Use newButton.label to edit and change the textLayer. I don't really know what else to say. This is my first time uploading something like this. Enjoy.
+You can change animations etc via newButton.animationOptions it will automatically update the label animations to match.
+Use newButton.label to edit and change the textLayer. I don't really know what else to say. This is my first time uploading something like this. Enjoy. 
 
 
 #### other stuff
