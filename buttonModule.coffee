@@ -1,138 +1,125 @@
-class Button extends Layer			
-	#--------------------------------------------
-	# # FUNCTIONS
-	#--------------------------------------------
-	#buttonStyle ->	
-	buttonStyle = (options = {}) ->
-		backgroundColor: options.backgroundColor
-		borderRadius: options.borderRadius
-		width: options.width
-		height: options.height
-		borderColor: options.borderColor
-		borderWidth: options.borderWidth
-		brightness: options.brightness
-		shadows: options.shadows
-	# labelStyle ->	
-	labelStyle = (options = {}) ->
-		labelCss = options.styledTextOptions.blocks[0].inlineStyles[0].css
-		fontSize: options.fontSize
-		point: Align.center
-		textAlign: "center"
-		color: options.color
-		padding: 8
-		fontFamily: labelCss.fontFamily
-		fontWeight: labelCss.fontWeight
-	
+class Button extends Layer				
 	#--------------------------------------------
 	# # CONSTRUCTOR
 	#--------------------------------------------
 	constructor: (options = {}) ->
-		@bactive = options.active
-		@bhover = options.hover
-		@bdown = options.down
-		@bdisabled = options.disabled
+		
+		#--------------------------------------------
+		# # SET bprops
+		#--------------------------------------------
+		@active = options.active.props
+		@hover = options.hover.props
+		@down = options.down.props
+		@disabled = options.disabled.props
+		super(options)
+		#--------------------------------------------
+		# # SET label properties
+		#--------------------------------------------
+		@active.lprops = options.active.children[0].props
+		@hover.lprops = options.hover.children[0].props
+		@down.lprops = options.down.children[0].props
+		@disabled.lprops = options.disabled.children[0].props
+		
+		#--------------------------------------------
+		# # FUNCTIONS
+		#--------------------------------------------
+		#bprops ->	
+		bprops = (props = {}) ->
+			backgroundColor: options.backgroundcolor || props.backgroundColor
+			borderRadius: options.borderRadius || props.borderRadius
+			width: options.width || props.width
+			height: options.height || props.height
+			borderColor: options.borderColor || props.borderColor
+			borderWidth: options.borderWidth || props.borderWidth
+			brightness: options.brightness || props.brightness
+			shadows: options.shadows || props.shadows
+		# lprops ->	
+		lprops = (props = {}) ->
+			fontSize: props.fontSize
+			point: Align.center
+			textAlign: "center"
+			color: props.color
+			padding: options.padding || 8
+			fontFamily: lpropsCss.fontFamily
+			fontWeight: lpropsCss.fontWeight
 		
 		#--------------------------------------------
 		# # SET BUTTON DEFAULT
 		#-------------------------------------------
-		super(buttonStyle(@bactive))
-		
-		#--------------------------------------------
-		# # SET LABEL TEXT
-		#--------------------------------------------
-		@lactive = @bactive.children[0].props
-		@lhover = @bhover.children[0].props
-		@ldown = @bdown.children[0].props
-		@ldisabled = @bdisabled.children[0].props
+		@props = bprops(@active)
+		# make the first state button active
 
 		#--------------------------------------------
-		# # SET TEXT DEFAULT
+		# # SET CSS FOR MISSING STYLES
 		#--------------------------------------------
-
-		labelCss = @lactive.styledTextOptions.blocks[0].inlineStyles[0].css
+		lpropsCss = @active.lprops.styledTextOptions.blocks[0].inlineStyles[0].css
 		#---- not sure why but many of the same styles return null when you read them from the design tab.
 	
-		@label = new TextLayer
+		#--------------------------------------------
+		# # CREATE LABEL
+		#--------------------------------------------
+		@buttonLabel = new TextLayer
 			parent: this
-			fontSize: @lactive.fontSize
+			fontSize: @active.lprops.fontSize
 			point:Align.center
 			textAlign: "center"
 			padding: 8
-			color: @lactive.color
-			fontFamily: labelCss.fontFamily
-			fontWeight: labelCss.fontWeight
-			text: options.label
-	
+			color: @active.lprops.color
+			fontFamily: lpropsCss.fontFamily
+			fontWeight: lpropsCss.fontWeight
+			text: options.buttonLabel
+
 		#--------------------------------------------
 		# # STATES
 		#--------------------------------------------
 		@states =
-			Bactive: buttonStyle(@bactive)
-			Bhover: buttonStyle(@bhover)
-			Bdown:	buttonStyle(@bdown)
-			Bdisabled: buttonStyle(@bdisabled)
+			active: bprops(@active)
+			hover: bprops(@hover)
+			down:	bprops(@down)
+			disabled: bprops(@disabled)
 		
-		@label.states =
-			lactive: labelStyle @lactive
-			lhover: labelStyle @lhover
-			ldown: labelStyle @ldown
-			ldisabled: labelStyle @ldisabled
+		@buttonLabel.states =
+			lactive: lprops @active.lprops
+			lhover: lprops @hover.lprops
+			ldown: lprops @down.lprops
+			ldisabled: lprops @disabled.lprops
 		
 		# #--------------------------------------------
 		# # EVENTS
 		# #--------------------------------------------
 		@onClick ->
-			@stateCycle("Bhover")
-			@label.stateCycle("lhover")
+			@stateCycle("hover")
+			@buttonLabel.stateCycle("lhover")
 		
 		@onMouseOver ->
-			@stateCycle("Bhover")
-			@label.stateCycle("lhover")
+			@stateCycle("hover")
+			@buttonLabel.stateCycle("lhover")
 			#- this is prob hacky I assume there should be somthing listening for an animation change but- oh well.
-			@label.animationOptions = @animationOptions
+			@buttonLabel.animationOptions = @animationOptions
 			
 		@onMouseDown ->
-			@stateCycle("Bdown")
-			@label.stateCycle("ldown")
+			@stateCycle("down")
+			@buttonLabel.stateCycle("ldown")
 		
 		@onMouseOut ->
-			@stateCycle("Bactive")
-			@label.stateCycle("lactive")
+			@stateCycle("active")
+			@buttonLabel.stateCycle("lactive")
 			
 	#---- this keeps stuff looking right when you resize
 		@on "change:frame", ->
-			@label.point = Align.center
+			@buttonLabel.point = Align.center
 			
-		@label.on "change:text", ->
-			@.point = Align.center
+		@buttonLabel.on "change:text", ->
+			@point = Align.center
 		
 		@disable = () ->
 				@ignoreEvents = true
-				@stateCycle("Bdisabled")
-				@label.stateCycle("ldisabled")
+				@stateCycle("disabled")
+				@buttonLabel.stateCycle("ldisabled")
 		
 		@enable = () ->
 				@ignoreEvents = false
-				@stateCycle("Bactive")
-				@label.stateCycle("lactive")
-
-# #--------------------------------------------
-# # BUTTON ANIMATIONS
-# #--------------------------------------------
-# setting some defaults
-
-	@animationOptions =
-			curve: Bezier.linear
-			time: 0.1
+				@stateCycle("active")
+				@buttonLabel.stateCycle("lactive")
 
 exports.Button = Button
-# newbutton = new button
-# 	active: b_active
-# 	hover: b_hover
-# 	down: b_down
-# 	disabled: b_disabled
-# 	label: "FART"
-# 
-# newbutton.animationOptions = 
-# 	time: 1
-
