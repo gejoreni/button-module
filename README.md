@@ -27,7 +27,7 @@ newButton = new Button
 	hover: b_hover  # takes in a layer with a textLayer inside.
 	down: b_down # takes in a layer with a textLayer inside.
 	disabled: b_disabled # takes in a layer with a textLayer inside.
-	label: "Hello World" # this is the text that shows on the button
+	buttonLabel: "Hello World" # this is the text that shows on the button
  
  ```
 #### 3. work with the new button like you would any other layer.
