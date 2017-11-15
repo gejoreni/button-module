@@ -3,16 +3,18 @@ a simple framer module for creating buttons from the design tab
 
 ![alt text](https://github.com/gejoreni/button-module/blob/master/button-module.png?raw=true "Header Image")
 
-So, first things first - i'm not a developer, not even close. This is just an example of how i'd like to take advantage of the design tab inside of the code tab. Don't judge me  - and if you don't like it, leave it - I won't judge you ;)
 
-![alt text](https://github.com/gejoreni/button-module/blob/master/button-gif.gif?raw=true "Header Image")
+![alt text](https://github.com/gejoreni/button-module/blob/master/button-gif.gif?raw=true "Header gif")
+
+So, first things first - i'm not a developer, not even close. This is just an example of how i'd like to take advantage of the design tab inside of the code tab. Don't judge me  - and if you don't like it, leave it - I won't judge you ;)
 ## How to:
 
 #### 1. Design 4 button states in the design tab. 
 - Active
 - Hover
-- down
+- Down
 - Disabled
+
 Call them whatever you want just make sure they are all targeted and available in the code tab. In the following example I call them b_active, b_hover, b_down, b_disabled.
 
 #### NOTE: Each button needs to have a child textLayer. The module will take on the style of each and animate it across the different states.
